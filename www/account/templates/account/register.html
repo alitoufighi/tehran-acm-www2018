@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load semanticui %}
+{% block body %}
+    <div style="min-width: 500px;width:50%; margin: 10rem auto 0 auto;" id="register-div">
+        <h1>Register</h1>
+        <form class="ui form" method="post" action="">
+            {% render_form form %}
+            {% csrf_token %}
+            <div class="submit">
+                <button type="submit" class="ui button">ثبت نام</button>
+            </div>
+
+        </form>
+    <button onclick="validate()">dssd</button>
+    </div>
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('input').attr('onkeyup', 'validate()');
+        });
+
+        function validate() {
+
+
+            $stu = document.getElementById('id_student_id').value;
+
+            $email = document.getElementById('id_email').value;
+
+            $password = document.getElementById('id_password1').value;
+
+
+            console.log($stu);
+
+{#            STU#}
+            if (/^\d{9}$/.test($stu)) {
+                $('#id_student_id').css("background-color", "white");
+            }
+            else {
+                $('#id_student_id').css("background-color", "red");
+            }
+
+{#            Email#}
+            if (/([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]\@ut.ac.ir$/.test($email)) {
+                $('#id_email').css("background-color", "white");
+            }
+            else {
+                $('#id_email').css("background-color", "red");
+            }
+
+
+            var format1 = /[ !@#$%^&*()]/;
+            var format2 = /.*\d.*/;
+            var format3 = /.*\D.*/;
+            if (format1.test($password) && format2.test($password) && format3.test($password)) {
+                $('#id_password1').css("background-color", "white");
+            }
+            else {
+                $('#id_password1').css("background-color", "red");
+            }
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div style="min-width: 500px;width:50%; margin: 10rem auto 0 auto;">
+        <h1>Notifications</h1>
+        {% for notif in notifications %}
+
+            <div class="ui segment notification">
+                <div>
+                    {{ notif.text|safe }}
+                </div>
+                <br>
+                <a href="{% url 'account:seen_notif' notif.id %}">خواندم!</a>
+            </div>
+            <br><br><br><br>
+        {% endfor %}
+    </div>
+{% endblock %}

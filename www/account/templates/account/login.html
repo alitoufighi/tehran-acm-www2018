@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load semanticui %}
+
+{% block body %}
+    <div style="min-width: 500px;width:40%; margin: 10rem auto 0 auto;">
+        <h1>Login</h1>
+        <form class="ui form" method="post" action="">
+            {% render_form form %}
+            {% csrf_token %}
+            <div class="submit">
+                <button type="submit" class="ui button">ورود</button>
+            </div>
+        </form>
+        {% if login_again %}
+            <button onclick="show_modal()">فراموشی رمز عبور</button>
+        {% endif %}
+    </div>
+
+    <div class="ui modal" style="height: 80vh; width: 80vw;">
+        <div class="header">فراموشی رمز</div>
+        <div class="content">
+            <iframe style="width: 100%; height: 80vh;" src="http://localhost:8000{% url 'account:reset' %}"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function show_modal() {
+            $('.ui.modal').modal('show');
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h2>گزارش ها</h2>
+    <table class="ui table">
+        <tr>
+            <th>پست</th>
+            <th>کاربر ارسال کننده</th>
+            <th>گزارش کننده</th>
+        </tr>
+        {% for report in reports %}
+            <tr>
+                <td><a href="{% url 'blog:show_post' report.post.id %}">{{ report.post.title }}</a></td>
+                <td>{{ report.post.author }}</td>
+                <td>{{ report.user }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>کاربران</h2>
+    <table class="ui table">
+        <tr>
+            <th>کاربر</th>
+            <th>کاربر عادی</th>
+            <th>مسئول</th>
+            <th>مدیر سیستم</th>
+            <th>بن شده</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>بله</td>
+                <td>{% if user.is_staff %}بله{% else %}خیر{% endif %}  <a
+                        href="{% url 'account:change_perm' id=user.id action=1 %}">برعکس</a></td>
+                <td>{% if user.is_superuser %}بله{% else %}خیر{% endif %}  <a
+                        href="{% url 'account:change_perm' id=user.id action=2 %}">برعکس</a></td>
+                <td>{% if not user.is_active %}بله{% else %}خیر{% endif %}  <a
+                        href="{% url 'account:change_perm' id=user.id action=3 %}">برعکس</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load semanticui %}
+
+{% block body %}
+    <div class="ui container">
+        <div class="ui segment">
+            <h1 class="ui header">
+                {{ post.title }}
+            </h1>
+            <div class="meta">
+                {% if not post.anon or request.user == post.author %}
+                    <a href="{% url 'account:profile' post.author.id %}">
+                        نویسنده: {{ post.author }}
+                    </a>
+                {% else %}
+                    <a href="#">
+                        کاربر ناشناس
+                    </a>
+                {% endif %}
+            </div>
+            <p>
+                {% autoescape off %}
+                    {{ post.text }}
+                {% endautoescape %}
+            </p>
+        </div>
+        <div>
+            <div class="ui label">{{ post.get_likes_count }} لایک</div>
+            <div class="ui label">{{ post.get_dislikes_count }} دیسلایک</div>
+        </div>
+        <br><br>
+        <div>
+            <a class="ui button primary" href="{% url 'blog:like' post_id=post.id %}">
+                لایک
+            </a>
+            <a class="ui primary button"
+               href="{% url 'blog:dislike' post_id=post.id %}">دیسلایک
+            </a>
+            {% if request.user.is_staff or request.user.is_superuser %}
+                <a class="ui red button"
+                   href="{% url 'blog:report' post_id=post.id %}">ریپورت
+                </a>
+            {% endif %}
+        </div>
+
+        <div><br>
+            <h4>تگ‌ها</h4>
+
+            {% for tag in post.tags.all %}
+                <div class="ui label">{{ tag }}</div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_staff or request.user.is_superuser %}
+            <br><br>
+            <div>
+                <h2>افزودن تگ</h2>
+                <form class="ui form" method="post" action="{% url 'blog:add_tag' post.id %}">
+                    {% render_form add_tag_form %}
+                    {% csrf_token %}
+                    <div class="submit">
+                        <button type="submit" class="ui button">افزودن تگ</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+        <br><br>
+        <div>
+            {% if post.author == request.user %}
+                <a class="ui red button" href="{% url 'blog:delete' post_id=post.id %}">حذف کردن</a>
+            {% endif %}
+        </div>
+        <div class="ui comments">
+            <h3 class="ui dividing header">نظرات</h3>
+            {% for comment in comments %}
+                <div class="comment">
+                    <a class="avatar" href="{% url 'account:profile' comment.user.id %}">
+                        <img src="{{ comment.user.profile.avatar.url }}">
+                    </a>
+                </div>
+                <div class="content" style="margin: 2px; padding: 0 3px;">
+                    <div class="metadata">
+                        {{ comment.user.first_name }} (<a class="author"
+                                                          href="{% url 'account:profile' comment.user.id %}">{{ comment.user.username }}</a>)
+                        در
+                        <span class="date">{{ comment.time }}</span>
+
+                    </div>
+                    <div class="text">
+                        {{ comment.text }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if request.user.is_authenticated %}
+            <form class="ui form" method="post" action="">
+                {% render_form new_comment_form %}
+                {% csrf_token %}
+                <div class="submit">
+                    <button type="submit" class="ui button">ثبت نظر</button>
+                </div>
+
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+

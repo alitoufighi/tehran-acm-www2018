@@ -1,0 +1,29 @@
+<div class="ui three cards" style="width: 100%;">
+    {% for post in blog_posts %}
+        <div class="card">
+            <div class="content">
+                <img class="right floated mini ui image" src="{{ post.author.profile.avatar.url }}">
+                <div class="ui small header" style="margin: 0 !important;">
+                    <a href="{% url 'account:profile' post.author.id %}">@{{ post.author.username }}</a>
+                </div>
+                <div class="ui tiny header" style="margin: 0 !important;">
+                    {{ post.author.first_name }} در {{ post.get_time }} - {{ post.time|time }}
+                </div>
+                <div class="description">
+                    {% autoescape off %}
+                        {{ post.text|truncatewords:40 }}
+                    {% endautoescape %}
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui label">{{ post.get_comments_count }} نظر</div>
+                <div class="ui label">{{ post.get_likes_count }} لایک</div>
+                <div class="ui label">{{ post.get_dislikes_count }} دیسلایک</div>
+
+                <a class="ui mini icon right floated button" href="{% url 'blog:show_post' post.id %}">
+                    <i class="left arrow icon"></i>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

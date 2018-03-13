@@ -1,0 +1,19 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify your email</title>
+</head>
+<body>
+{% url 'account:activate' uidb64=uid token=token as active-url %}
+{% autoescape off %}
+    {% blocktrans %}
+        Hi {{ user.username }},
+        Please click on the link to confirm your registration,
+        http://localhost:9000/{{ active-url }}
+    {% endblocktrans %}
+{% endautoescape %}
+
+</body>
+</html>
